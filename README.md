@@ -101,3 +101,15 @@ pip install apache-airflow["s3"]
 
 airflow db init
 ```
+
+### Using the environment
+
+## Starting
+- Load the environment variables `source environment.sh`
+- Activate the conda env `conda activate airflow_udacity`
+- Before starting airflow, make sure the MySQL container is UP and running `docker-compose restart`
+- Use `./start.sh` to start Airflow
+
+## Stoping
+- Kill Airflow processes `pkill -f airflow`
+- Stop the MySQL container `docker-compose stop`
