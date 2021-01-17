@@ -1,8 +1,9 @@
+from typing import Tuple
+
 from airflow.hooks.postgres_hook import PostgresHook
 from airflow.hooks.S3_hook import S3Hook
 from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
-from typing import Tuple
 
 
 class StageToRedshiftOperator(BaseOperator):
