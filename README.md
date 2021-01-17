@@ -41,9 +41,9 @@ Using the star schema because the main focus is analytics.
 |-------------------|     |---------------------|    |--------------------|
 |      Users        |     |        Songs        |    |       Artists      |
 |-------------------|     |---------------------|    |--------------------|
-| user_id           |     | song_id             |    | artist_id          |
+| userid            |     | songid              |    | artistid           |
 | first_name        |     | title               |    | name               |
-| last_name         |     | artist_id           |    | location           |
+| last_name         |     | artistid            |    | location           |
 | gender            |     | year                |    | lattitude          |
 | level             |     | duration            |    | longitude          |
 |-------------------|     |---------------------|    |--------------------|
@@ -53,13 +53,13 @@ Using the star schema because the main focus is analytics.
 |-------------------|     |-------------------|
 |     songplays     |     |       time        |
 |-------------------|     |-------------------|
-| songplay_id       |     | start_time        |
+| playid            |     | start_time        |
 | start_time        |-----| hour              |
-| user_id           |     | day               |
+| userid            |     | day               |
 | level             |     | week              |
-| song_id           |     | month             |
-| artist_id         |     | year              |
-| session_id        |     | weekday           |
+| songid            |     | month             |
+| artistid          |     | year              |
+| sessionid         |     | weekday           |
 | location          |     |-------------------|
 | user_agent        |     
 |-------------------|     
