@@ -1,0 +1,12 @@
+*__pycache__*
+environment.sh
+logs/*
+unittests.cfg
+airflow.cfg
+*.pid
+*.err
+*.log
+*.out
+.vscode
+song_data
+test.py

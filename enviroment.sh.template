@@ -1,0 +1,48 @@
+########################
+## Shoud fill
+########################
+export AIRFLOW_HOME=  # Full path to the project folder
+export MYSQL_USER_PASSWORD= # The mysql container will be created using this password 
+export MYSQL_ROOT_PASSWORD= # The mysql container will be created using this password 
+export AWS_KEY= # AWS Key
+export AWS_SECRET= # AWS Key Secret
+export RS_ADDR= # Redshift hostname or ip address 
+export RS_USER= # Redshift user
+export RS_PASSWD= # Redshift password
+export RS_DB= # Redshift database
+export RS_PORT= # Redshift port
+
+
+########################
+## Can customize
+########################
+export MYSQL_USER=airflow # The mysql container will be created using this user 
+export MYSQL_DATABASE=airflow_db # The mysql container setup will create this database 
+export MYSQL_CONTAINER_NAME=mysql_udacity # Self explanatory
+export AIRFLOW__CORE__DEFAULT_TIMEZONE="America/Sao_Paulo" # Self explanatory
+export AIRFLOW__CORE__SCHEDULER_HEARTBEAT_SEC="30" # Self explanatory
+export AIRFLOW__CORE__MIN_FILE_PROCESS_INTERVAL="300" # Self explanatory
+# Checkout the Airflow environment docs for more info
+
+
+########################
+## Should not alter
+########################
+# Core Airflow database conection
+export AIRFLOW__CORE__SQL_ALCHEMY_CONN="mysql://$MYSQL_USER:$MYSQL_USER_PASSWORD@127.0.0.1:33060/$MYSQL_DATABASE"
+
+# Redshift database conection, I decided to use the env variable instead of the interface
+# because it is easier to reproduce. The connection id is just redshift
+export AIRFLOW_CONN_REDSHIFT="redshift+psycopg2://$RS_USER:$RS_PASSWD@$RS_ADDR:$RS_PORT/$RS_DB"
+
+# AWS credentials
+export AIRFLOW_CONN_AWS="aws://$AWS_KEY:$AWS_SECRET@"
+
+# LocalExecutor should be used so tasks can run in parallel 
+export AIRFLOW__CORE__EXECUTOR="LocalExecutor"
+
+# Disables the sample dags
+export AIRFLOW__CORE__LOAD_EXAMPLES=False
+
+
+

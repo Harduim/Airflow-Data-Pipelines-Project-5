@@ -1,0 +1,11 @@
+name: airflow_udacity
+channels:
+  - defaults
+dependencies:
+  - pandas
+  - psycopg2
+  - sqlalchemy
+  - pip
+  - mysqlclient
+  - pip:
+    - sqlalchemy-redshift

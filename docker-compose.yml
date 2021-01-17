@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+    mysql:
+        image: mysql:5.7
+        container_name: "${MYSQL_CONTAINER_NAME}"
+        restart: "no"
+        command: --explicit_defaults_for_timestamp=1
+        environment:
+            MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+            MYSQL_DATABASE: "${MYSQL_DATABASE}"
+            MYSQL_USER: "${MYSQL_USER}"
+            MYSQL_PASSWORD: "${MYSQL_USER_PASSWORD}"
+        ports:
+            - "33060:3306"
+        deploy:
+            resources:
+                limits:
+                    memory: 1024M
+                reservations:
+                    memory: 128M
