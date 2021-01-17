@@ -37,7 +37,7 @@ artist_table_insert = """INSERT INTO artists
         SELECT distinct song_id, title, artist_id, year, duration
         FROM staging_songs; """
 
-song_table_insert = """ INSERT INTO songs
+song_table_insert = """INSERT INTO songs
         SELECT distinct artist_id, artist_name, artist_location, artist_latitude, artist_longitude
         FROM staging_songs;"""
 
