@@ -71,7 +71,6 @@ Using the star schema because the main focus is analytics.
 
 ### Requirements:
 - An active Amazon AWS Account
-- An active S3 Bucket
 - Anaconda
 - Ubuntu
 - Docker
