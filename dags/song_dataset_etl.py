@@ -83,8 +83,8 @@ with DAG(
         "email_on_retry": False,
         "retries": 3,
         "retry_delay": timedelta(minutes=5),
+        "catchup": False
     },
-    catchup=False,
 ) as dag:
     start_operator = DummyOperator(task_id="Begin_execution")
 
@@ -99,7 +99,6 @@ with DAG(
         copy_options=("REGION  'us-west-2'", f"json 's3://{S3_BUCKET}/log_json_path.json'"),
         autocommit=True,
     )
-
     stage_songs_to_redshift = StageToRedshiftOperator(
         task_id="Stage_songs",
         schema="public",
@@ -111,7 +110,6 @@ with DAG(
         copy_options=("REGION 'us-west-2'", "json 'auto'"),
         autocommit=True,
     )
-
     load_songplays_table = LoadFactOperator(
         task_id="Load_songplays_fact_table",
         postgres_conn_id=REDSHIFT_CONN_ID,
