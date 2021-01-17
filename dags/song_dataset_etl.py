@@ -93,6 +93,7 @@ with DAG(
     },
     catchup=False,
 ) as dag:
+    start_operator = DummyOperator(task_id='Begin_execution')
     stage_events_to_redshift = StageToRedshiftOperator(
         task_id="Stage_events",
         schema="public",
@@ -149,7 +150,9 @@ with DAG(
         autocommit=True,
     )
     run_quality_checks = DummyOperator(task_id="Run_data_quality_checks")
+    end_operator = DummyOperator(task_id='Stop_execution')
     chain(
+        start_operator,
         [stage_events_to_redshift, stage_songs_to_redshift],
         load_songplays_table,
         [
@@ -159,4 +162,5 @@ with DAG(
             load_time_dimension_table,
         ],
         run_quality_checks,
+        end_operator,
     )
