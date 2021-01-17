@@ -54,6 +54,7 @@ class StageToRedshiftOperator(BaseOperator):
         self.s3 = S3Hook(aws_conn_id=self.aws_conn_id)
         credentials = self.s3.get_credentials()
         copy_options = "\n\t\t".join(self.copy_options)
+        self.s3_path = self.s3_path.format(**context)
 
         copy_query = f"""
             COPY {self.schema}.{self.table}
