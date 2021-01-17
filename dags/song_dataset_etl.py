@@ -1,4 +1,3 @@
-import os
 from datetime import datetime, timedelta
 
 from airflow import DAG
@@ -11,8 +10,7 @@ from airflow.operators import (
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.utils.helpers import chain
 
-songplay_table_insert = """
-        INSERT INTO songplays
+songplay_table_insert = """INSERT INTO songplays
         SELECT md5(events.sessionid || events.start_time) songplay_id,
                 events.start_time,
                 events.userid,
@@ -28,30 +26,22 @@ songplay_table_insert = """
             LEFT JOIN staging_songs songs
             ON events.song = songs.title
                 AND events.artist = songs.artist_name
-                AND events.length = songs.duration
-    """
+                AND events.length = songs.duration;"""
 
-user_table_insert = """
-        INSERT INTO users
+user_table_insert = """INSERT INTO users
         SELECT distinct userid, firstname, lastname, gender, level
         FROM staging_events
-        WHERE page='NextSong';
-    """
+        WHERE page='NextSong';"""
 
-artist_table_insert = """
-        INSERT INTO artists
+artist_table_insert = """INSERT INTO artists
         SELECT distinct song_id, title, artist_id, year, duration
-        FROM staging_songs;
-    """
+        FROM staging_songs; """
 
-song_table_insert = """
-        INSERT INTO songs
+song_table_insert = """ INSERT INTO songs
         SELECT distinct artist_id, artist_name, artist_location, artist_latitude, artist_longitude
-        FROM staging_songs;
-    """
+        FROM staging_songs;"""
 
-time_table_insert = """
-        INSERT INTO time
+time_table_insert = """INSERT INTO time
         SELECT start_time,
                 extract(hour from start_time),
                 extract(day from start_time),
@@ -59,11 +49,18 @@ time_table_insert = """
                 extract(month from start_time),
                 extract(year from start_time),
                 extract(dayofweek from start_time)
-        FROM songplays;
+        FROM songplays;"""
+
+
+def result_not_zero(result: list):
+    """ "Returns True if query result is bigger than 0"
+
+    Args:
+        result (list): Result from a sqlalchemy query
+
+    Returns:
+        bool: True of False
     """
-
-
-def result_not_zero(result):
     return result[0][0] > 0
 
 
@@ -84,38 +81,36 @@ with DAG(
         "email": ["arthur@rioenergy.com.br"],
         "email_on_failure": False,
         "email_on_retry": False,
-        "retries": 0,  # <=========== Mudar para 3 depois de testar
+        "retries": 3,
         "retry_delay": timedelta(minutes=5),
     },
     catchup=False,
 ) as dag:
     start_operator = DummyOperator(task_id="Begin_execution")
 
-    stage_events_to_redshift = DummyOperator(task_id="Stage_events")
-    # stage_events_to_redshift = StageToRedshiftOperator(
-    #     task_id="Stage_events",
-    #     schema="public",
-    #     table="staging_events",
-    #     s3_bucket=S3_BUCKET,
-    #     s3_path=LOG_PATH,
-    #     redshift_conn_id=REDSHIFT_CONN_ID,
-    #     aws_conn_id=AWS_CONN_ID,
-    #     copy_options=("REGION  'us-west-2'", f"json 's3://{S3_BUCKET}/log_json_path.json'"),
-    #     autocommit=True,
-    # )
+    stage_events_to_redshift = StageToRedshiftOperator(
+        task_id="Stage_events",
+        schema="public",
+        table="staging_events",
+        s3_bucket=S3_BUCKET,
+        s3_path=LOG_PATH,
+        redshift_conn_id=REDSHIFT_CONN_ID,
+        aws_conn_id=AWS_CONN_ID,
+        copy_options=("REGION  'us-west-2'", f"json 's3://{S3_BUCKET}/log_json_path.json'"),
+        autocommit=True,
+    )
 
-    stage_songs_to_redshift = DummyOperator(task_id="Stage_songs")
-    # stage_songs_to_redshift = StageToRedshiftOperator(
-    #     task_id="Stage_songs",
-    #     schema="public",
-    #     table="staging_songs",
-    #     s3_bucket=S3_BUCKET,
-    #     s3_path=SONG_PATH,
-    #     redshift_conn_id=REDSHIFT_CONN_ID,
-    #     aws_conn_id=AWS_CONN_ID,
-    #     copy_options=("REGION 'us-west-2'", "json 'auto'"),
-    #     autocommit=True,
-    # )
+    stage_songs_to_redshift = StageToRedshiftOperator(
+        task_id="Stage_songs",
+        schema="public",
+        table="staging_songs",
+        s3_bucket=S3_BUCKET,
+        s3_path=SONG_PATH,
+        redshift_conn_id=REDSHIFT_CONN_ID,
+        aws_conn_id=AWS_CONN_ID,
+        copy_options=("REGION 'us-west-2'", "json 'auto'"),
+        autocommit=True,
+    )
 
     load_songplays_table = LoadFactOperator(
         task_id="Load_songplays_fact_table",
