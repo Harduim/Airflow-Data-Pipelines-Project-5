@@ -22,6 +22,8 @@ export MYSQL_CONTAINER_NAME=mysql_udacity # Self explanatory
 export AIRFLOW__CORE__DEFAULT_TIMEZONE="America/Sao_Paulo" # Self explanatory
 export AIRFLOW__CORE__SCHEDULER_HEARTBEAT_SEC="30" # Self explanatory
 export AIRFLOW__CORE__MIN_FILE_PROCESS_INTERVAL="300" # Self explanatory
+export AIRFLOW__CORE__EXECUTOR="LocalExecutor"
+export AIRFLOW__CORE__LOAD_EXAMPLES=False
 # Checkout the Airflow environment docs for more info
 
 
